@@ -12,4 +12,12 @@ const Users = {
       (await sql`select true from users where username=${username}`).count !== 0
     );
   },
+
+  add: async (username: string, password: string): Promise<User> => {
+    return (
+      await sql<
+        User[]
+      >`insert into users (username, password) values (${username}, ${password}) returning id, username, password`
+    )[0];
+  },
 };
