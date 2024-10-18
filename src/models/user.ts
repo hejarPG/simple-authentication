@@ -21,3 +21,5 @@ const Users = {
     )[0];
   },
 };
+
+export default Users;
