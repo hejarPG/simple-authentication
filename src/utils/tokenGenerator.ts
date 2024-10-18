@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
+import redis from "../configs/redis";
 
-export const generateTokens = (
+export const generateTokens = async (
   userId: number
-): { accessToken: string; refreshToken: string } => {
+): Promise<{ accessToken: string; refreshToken: string }> => {
   const accessToken = jwt.sign(
     { userId },
     process.env.ACCESS_TOKEN_SECRET as string,
@@ -11,13 +12,15 @@ export const generateTokens = (
     }
   );
 
+  const uuid = crypto.randomUUID();
   const refreshToken = jwt.sign(
-    { userId },
+    { userId, uuid },
     process.env.REFRESH_TOKEN_SECRET as string,
     {
       expiresIn: process.env.REFRESH_TOKEN_EXP as string,
     }
   );
+  await redis.set(uuid, refreshToken);
 
   return { accessToken, refreshToken };
 };
