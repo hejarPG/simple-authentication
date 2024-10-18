@@ -20,6 +20,12 @@ const Users = {
       >`insert into users (username, password) values (${username}, ${password}) returning id, username, password`
     )[0];
   },
+
+  get: async (username: string): Promise<User> => {
+    return (
+      await sql<User[]>`select * from users where username=${username}`
+    )[0];
+  },
 };
 
 export default Users;
