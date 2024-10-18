@@ -29,6 +29,7 @@ const authApp = new Hono().post(
     const addedUser = await Users.add(username, hashedPassword);
     console.log(addedUser);
 
+    c.status(201);
     return c.json({
       status: "success",
       message: `user ${username} created successfully`,
